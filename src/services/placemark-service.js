@@ -59,4 +59,43 @@ export const placemarkService = {
             axios.defaults.headers.common["Authorization"] = "Bearer " + savedUser.token;
         }
     },
+
+    async getUser(user){
+        try{
+            const response = await axios.get(this.baseUrl + "/api/users/" + user);
+            return response.data;
+        } catch(error){
+            return [];
+        }
+    },
+
+    async getPlacemark(placemarkID){
+        try {
+            const response = await axios.get(this.baseUrl + "api/placemarks", placemarkID);
+            return response.data;
+        } catch (error) {
+            return [];
+        }
+    },
+
+    async getPlacemarks(){
+        try {
+            const response = await axios.get(this.baseUrl + "api/placemarks");
+            return response.data;
+        } catch (error) {
+            return [];
+        }
+    },
+
+    async addPlacemark(placemark){
+        try {
+            const response = await axios.post(this.baseUrl + "api/placemarks", placemark);
+            if (response.data) {
+                latestPlacemark.set(response.data);
+            }
+            return response.data;
+        } catch (error) {
+            return [];
+        }
+    }
 };
