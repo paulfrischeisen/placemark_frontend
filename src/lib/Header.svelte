@@ -4,7 +4,7 @@
 
 <div class="columns is-vcentered">
     <div class="column is-two-thirds">
-        <TitleBar title={'RockExplorer'} subTitle={'Sign up or Log in'} />
+        <TitleBar title={'RockExplorer'}/>
     </div>
     <div class="column">
         <slot />

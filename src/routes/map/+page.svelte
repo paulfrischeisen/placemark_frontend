@@ -8,4 +8,4 @@
     <MainNavigator />
 </Header>
 
-<PlacemarkMap />
+<PlacemarkMap see={true}/>

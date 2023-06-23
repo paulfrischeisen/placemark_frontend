@@ -41,8 +41,10 @@
     });
 
     function addPlacemarkMarker(map, placemark) {
-        const placemarkStr = `<a href='/poi/${placemark._id}'>${placemark.name} <small>(click for details}</small></a>`;
-        map.addMarker({ lat: placemark.lat, lng: placemark.lng }, placemarkStr, "Placemarks");
+        //const placemarkStr = `<a href='/poi/${placemark._id}'>${placemark.name} <small>(click for details}</small></a>`;
+        //map.addMarker({ lat: placemark.lat, lng: placemark.lng }, placemarkStr, "Placemarks");
+        map.addMarker({ lat: placemark.lat, lng: placemark.lng }, placemark.name, "Placemarks");
+        map.moveTo(zoom, { lat: placemark.lat, lng: placemark.lng });
     }
 
     latestPlacemark.subscribe((placemark) => {
