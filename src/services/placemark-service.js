@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import axios from "axios";
 import { user, latestPlacemark } from "../stores.js";
@@ -10,6 +11,7 @@ export const placemarkService = {
             const response = await axios.post(`${this.baseUrl}/api/users/authenticate`, { email, password });
             axios.defaults.headers.common["Authorization"] = "Bearer " + response.data.token;
             if (response.data.success) {
+                console.log(`auth. for login complete. User, localStorage stores now user: ${email} and the token ${response.data.token}`);
                 user.set({
                     email: email,
                     token: response.data.token
@@ -71,7 +73,7 @@ export const placemarkService = {
 
     async getPlacemark(placemarkID){
         try {
-            const response = await axios.get(this.baseUrl + "api/placemarks", placemarkID);
+            const response = await axios.get(this.baseUrl + "/api/placemarks/" + placemarkID);
             return response.data;
         } catch (error) {
             return [];
@@ -80,7 +82,7 @@ export const placemarkService = {
 
     async getPlacemarks(){
         try {
-            const response = await axios.get(this.baseUrl + "api/placemarks");
+            const response = await axios.get(this.baseUrl + "/api/placemarks");
             return response.data;
         } catch (error) {
             return [];
@@ -88,8 +90,25 @@ export const placemarkService = {
     },
 
     async addPlacemark(placemark){
+        console.log("test123");
+        console.log(placemark.data);
         try {
-            const response = await axios.post(this.baseUrl + "api/placemarks", placemark);
+            const response = await axios.post(this.baseUrl + "/api/placemarks", placemark);
+            if (response.data) {
+                latestPlacemark.set(response.data);
+                console.log("drinnen");
+                console.log(response.data);
+            }
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            return [];
+        }
+    },
+
+    async updatePlacemark(id, placemark){
+        try {
+            const response = await axios.put(this.baseUrl + "/api/placemarks/" + id, placemark);
             if (response.data) {
                 latestPlacemark.set(response.data);
             }

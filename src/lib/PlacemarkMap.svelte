@@ -1,4 +1,5 @@
 <script>
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-nocheck
 
     import "leaflet/dist/leaflet.css";
@@ -22,35 +23,80 @@
         minZoom: minZoom
     };
     let map;
+    let categories = [];
 
     onMount(async () => {
-        map = new LeafletMap(id, mapConfig, activeLayer);
+        await import("leaflet/dist/leaflet.css");
+        const { LeafletMap } = await import("../services/leaflet-map.js");
+
+        const map = new LeafletMap(id, mapConfig, activeLayer);
         map.showZoomControl();
         map.addLayerGroup("Placemarks");
         map.showLayerControl();
+
+
+
+        const placemarks = await placemarkService.getPlacemarks();
+        placemarks.forEach((placemark) => {
+            map.addMarker({ lat: placemark.lat, lng: placemark.lng });
+            /*
+            if (!categories.includes(placemark.category)){
+                categories.push(placemark.category);
+            }
+
+             */
+        });
+
+        /*
+        for (let i = 0; i < categories.length; i++){
+            map.addLayerGroup(categories[i]);
+        }
+
+        placemarks.forEach((placemark) => {
+            addPlacemarkMarker(map, placemark);
+        });
+
+         */
+
+        /*
         if (see === true) {
             const placemarks = await placemarkService.getPlacemarks();
+            placemarks.forEach((placemark) => {
+                if (!categories.includes(placemark.category)){
+                    categories.push(placemark.category);
+                }
+            });
+
+            for (let i = 0; i < categories.length; i++){
+                map.addLayerGroup(categories[i]);
+            }
+
             placemarks.forEach((placemark) => {
                 addPlacemarkMarker(map, placemark);
             });
         }
+
         if (see === false){
             addPlacemarkMarker(map, marker);
-            map.moveTo(zoom, { lat: marker.lat, lng: marker.lng });
         }
+
+         */
+
+
     });
 
     function addPlacemarkMarker(map, placemark) {
-        //const placemarkStr = `<a href='/poi/${placemark._id}'>${placemark.name} <small>(click for details}</small></a>`;
-        //map.addMarker({ lat: placemark.lat, lng: placemark.lng }, placemarkStr, "Placemarks");
-        map.addMarker({ lat: placemark.lat, lng: placemark.lng }, placemark.name, "Placemarks");
+        const placemarkStr = `<a href='/poi/${placemark._id}'> ${placemark.name} <small>(click for details}</small></a>`;
+        map.addMarker({ lat: placemark.location.coordinates[0], lng: placemark.location.coordinates[1] }, placemarkStr, placemark.category);
         map.moveTo(zoom, { lat: placemark.lat, lng: placemark.lng });
     }
 
     latestPlacemark.subscribe((placemark) => {
         if (placemark && map) {
+            if (!categories.includes(placemark.category)) {
+                map.addLayerGroup(placemark.category);
+            }
             addPlacemarkMarker(map, placemark);
-            map.moveTo(zoom, { lat: placemark.lat, lng: placemark.lng });
         }
     });
 

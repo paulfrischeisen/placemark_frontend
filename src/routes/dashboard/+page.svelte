@@ -11,7 +11,7 @@
 
 <div class="columns is-vcentered">
     <div class="column has-text-centered">
-        <PlacemarkMap/>
+        <PlacemarkMap see="{true}"/>
     </div>
     <div class="column box has-text-centered">
         <h1 class="title is-4">Create a new Placemark</h1>

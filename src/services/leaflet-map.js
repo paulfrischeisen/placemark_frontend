@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import * as L from "leaflet";
 
@@ -68,7 +69,7 @@ export class LeafletMap {
         let group = {};
         let marker = L.marker([location.lat, location.lng]);
         if (popupText) {
-            var popup = L.popup({ autoClose: false, closeOnClick: false });
+            const popup = L.popup({autoClose: false, closeOnClick: false});
             popup.setContent(popupText);
             marker.bindPopup(popup);
         }
