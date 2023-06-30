@@ -17,6 +17,7 @@
                 lng: lng,
                 description: description,
                 category: category ? category: "Other",
+                images: [],
             };
             console.log(placemark.category);
             const success = await placemarkService.addPlacemark(placemark)

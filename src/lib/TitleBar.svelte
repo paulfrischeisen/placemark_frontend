@@ -11,7 +11,7 @@
     </div>
     <div class="column">
         {#if $user.email}
-            <div class="is-size-7">{$user.email}</div>
+            <div class="is-size-7">currently logged in: {$user.email}</div>
         {:else}
             <div class="is-size-7">RockExplorer</div>
         {/if}

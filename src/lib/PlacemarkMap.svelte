@@ -3,7 +3,7 @@
     // @ts-nocheck
 
     import "leaflet/dist/leaflet.css";
-    import { LeafletMap } from "../services/leaflet-map";
+    // import { LeafletMap } from "../services/leaflet-map";
     import { onMount } from "svelte";
     import { placemarkService } from "../services/placemark-service";
     import { latestPlacemark } from "../stores";
@@ -14,8 +14,8 @@
     export let zoom = 8;
     export let minZoom = 1;
     export let activeLayer = "Terrain";
-    export let marker;
-    export let see = false;
+    export let marker = null;
+    export let seeAll = false;
 
     const mapConfig = {
         location: location,
@@ -31,36 +31,12 @@
 
         const map = new LeafletMap(id, mapConfig, activeLayer);
         map.showZoomControl();
-        map.addLayerGroup("Placemarks");
-        map.showLayerControl();
+        //map.addLayerGroup("Placemarks");
+        //map.showLayerControl();
 
-
-
-        const placemarks = await placemarkService.getPlacemarks();
-        placemarks.forEach((placemark) => {
-            map.addMarker({ lat: placemark.lat, lng: placemark.lng });
-            /*
-            if (!categories.includes(placemark.category)){
-                categories.push(placemark.category);
-            }
-
-             */
-        });
-
-        /*
-        for (let i = 0; i < categories.length; i++){
-            map.addLayerGroup(categories[i]);
-        }
-
-        placemarks.forEach((placemark) => {
-            addPlacemarkMarker(map, placemark);
-        });
-
-         */
-
-        /*
-        if (see === true) {
+        if (seeAll === true){
             const placemarks = await placemarkService.getPlacemarks();
+
             placemarks.forEach((placemark) => {
                 if (!categories.includes(placemark.category)){
                     categories.push(placemark.category);
@@ -70,24 +46,22 @@
             for (let i = 0; i < categories.length; i++){
                 map.addLayerGroup(categories[i]);
             }
+            map.showLayerControl();
+
 
             placemarks.forEach((placemark) => {
                 addPlacemarkMarker(map, placemark);
             });
         }
-
-        if (see === false){
+        if(seeAll === false){
             addPlacemarkMarker(map, marker);
         }
-
-         */
-
 
     });
 
     function addPlacemarkMarker(map, placemark) {
         const placemarkStr = `<a href='/poi/${placemark._id}'> ${placemark.name} <small>(click for details}</small></a>`;
-        map.addMarker({ lat: placemark.location.coordinates[0], lng: placemark.location.coordinates[1] }, placemarkStr, placemark.category);
+        map.addMarker({ lat: placemark.lat, lng: placemark.lng }, placemarkStr, placemark.category);
         map.moveTo(zoom, { lat: placemark.lat, lng: placemark.lng });
     }
 

@@ -2,6 +2,7 @@
 // @ts-nocheck
 import axios from "axios";
 import { user, latestPlacemark } from "../stores.js";
+import {goto} from "$app/navigation";
 
 export const placemarkService = {
     baseUrl: "http://localhost:4000",
@@ -114,6 +115,41 @@ export const placemarkService = {
             }
             return response.data;
         } catch (error) {
+            return [];
+        }
+    },
+
+    async getPlacemarkByCategory(placemarkCategory) {
+        try {
+            const response = await axios.get(this.baseUrl + "/api/placemarks/getByCategory/" + placemarkCategory);
+            return response.data;
+        } catch (error) {
+            return [];
+        }
+    },
+
+    async addImage(id, dataForm) {
+        try {
+            let response = await axios.post(this.baseUrl + "/api/placemarks/addImage/" + id, dataForm, {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            });
+            return response.data;
+        } catch(error) {
+            return [];
+        }
+    },
+
+    async deleteImage(id, imageURL) {
+        try {
+            let response = await axios.delete(this.baseUrl + "/api/placemarks/deleteImage/" + id, {
+                data: {
+                    imageURL: imageURL
+                }
+            });
+            return response.data;
+        } catch(error) {
             return [];
         }
     }

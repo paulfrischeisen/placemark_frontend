@@ -64,7 +64,6 @@
     }
 
     async function toggleEditable() {
-        //to always toggle you can just use the opposite of the value every time
         isEditable = !isEditable;
 
         if (!isEditable) {
@@ -81,6 +80,13 @@
     function updateValues(event) {
         const id = event.target.id;
         editableValues[id] = event.target.innerText;
+    }
+
+    async function deleteImage(image) {
+        let response = await placemarkService.deleteImage(placemark._id, image);
+        if(response) {
+            placemark = response;
+        }
     }
 
 
@@ -120,55 +126,77 @@
                     <div class="columns">
 
                         <div class="column">
-                            <PlacemarkMap id="street-map" marker={p} see={false} zoom={15} height={50}/>
+                            <PlacemarkMap id="street-map" marker={p} seeAll={false} zoom={10} height={50}/>
                         </div>
 
                         <div class="column is-half">
-                            <PlacemarkMap id="satellite-map" marker={p} see={false} zoom={15} height={50} showLayer="Satellite"/>
+                            <PlacemarkMap id="satellite-map" marker={p} seeAll={false} zoom={10} height={50} activeLayer="Satellite"/>
                         </div>
 
                     </div>
                     <div class="columns">
 
                         <div class="column is-half">
-                            <PlacemarkMap id="all-marker-map" see={true} height={50} location={location}/>
+                            <PlacemarkMap id="all-marker-map" seeAll={true} height={50} zoom={5} location={location}/>
                         </div>
 
                         <div class="column is-half">
-                            <table class="table is-fullwidth table is-bordered table is-striped">
-                                <tbody>
-                                <tr>
-                                    <td>Latitude</td>
-                                    <td id="lat" contenteditable={isEditable} on:input={updateValues}>{editableValues["lat"]}</td>
-                                </tr>
-                                <tr>
-                                    <td>Longitude</td>
-                                    <td id="lng" contenteditable={isEditable} on:input={updateValues}>{editableValues["lng"]}</td>
-                                </tr>
-                                </tbody>
-                            </table>
-
                             <p id="description" contenteditable={isEditable} on:input={updateValues}> {editableValues["description"] } </p>
 
                             <br/>
 
                             <p> Category: <span id="category" contenteditable={isEditable} on:input={updateValues}>{editableValues["category"]}</span> </p>
 
+                            <table class="table is-fullwidth table is-bordered table is-striped">
+                                <tbody>
+                                    <tr>
+                                        <td>Latitude</td>
+                                        <td id="lat" contenteditable={isEditable} on:input={updateValues}>{editableValues["lat"]}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Longitude</td>
+                                        <td id="lng" contenteditable={isEditable} on:input={updateValues}>{editableValues["lng"]}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+
 
                             <table class="table is-fullwidth table is-bordered table is-striped">
                                 <tbody>
-                                <tr>
-                                    <td>Creator of the Placemark: </td>
-                                    <td>{user.firstName + user.lastName}</td>
-                                </tr>
-                                <tr>
-                                    <td>E-Mail: </td>
-                                    <td>{user.email}</td>
-                                </tr>
+                                    <tr>
+                                        <td>Creator of the Placemark: </td>
+                                        <td>{user.firstName + user.lastName}</td>
+                                    </tr>
                                 </tbody>
                             </table>
-                        </div>
 
+                            {#if isEditable}
+                                <ImageSelection imgName="Select an Image" imageUploadStatus={imageUploadStatus} successUploadingImage={successUploadingImage}/>
+                            {/if}
+
+                            {#each p.images as image}
+                                {#if isEditable}
+                                    <div class="card my-3 py-3">
+                                        <div class="card-image">
+                                            <figure class="image is-256x256">
+                                                <img src={image} alt="">
+                                            </figure>
+                                        </div>
+                                        <div class="card-content">
+                                            <button class="button is-danger ml-2" on:click={() => deleteImage(image)}>
+                                                Delete!
+                                            </button>
+                                        </div>
+                                    </div>
+                                {/if}
+                                {#if !isEditable}
+                                    <figure class="image is-256x256">
+                                        <img src={image} alt="">
+                                    </figure>
+                                {/if}
+                            {/each}
+                        </div>
                     </div>
                 </div>
             </div>
