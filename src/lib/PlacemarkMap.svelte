@@ -26,7 +26,7 @@
     let categories = [];
 
     onMount(async () => {
-        await import("leaflet/dist/leaflet.css");
+        // await import("leaflet/dist/leaflet.css");
         const { LeafletMap } = await import("../services/leaflet-map.js");
 
         const map = new LeafletMap(id, mapConfig, activeLayer);
