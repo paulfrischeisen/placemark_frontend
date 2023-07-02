@@ -2,7 +2,7 @@
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-nocheck
 
-    import "leaflet/dist/leaflet.css";
+    // import "leaflet/dist/leaflet.css";
     // import { LeafletMap } from "../services/leaflet-map";
     import { onMount } from "svelte";
     import { placemarkService } from "../services/placemark-service";
