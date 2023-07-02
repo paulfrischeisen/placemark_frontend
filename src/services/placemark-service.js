@@ -6,7 +6,7 @@ import {goto} from "$app/navigation";
 
 export const placemarkService = {
     //baseUrl: "http://localhost:4000",
-    baseUrl: "https://placemark-backend-8u8c.onrender.com/",
+    baseUrl: "https://placemark-backend-8u8c.onrender.com",
 
     async login(email, password) {
         try {
