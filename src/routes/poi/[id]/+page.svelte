@@ -179,7 +179,7 @@
                                 {#if isEditable}
                                     <div class="card my-3 py-3">
                                         <div class="card-image">
-                                            <figure class="image is-256x256">
+                                            <figure class="image is-64x64">
                                                 <img src={image} alt="">
                                             </figure>
                                         </div>
